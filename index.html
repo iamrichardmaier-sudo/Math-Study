@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculus Study Guide — Chapter 1: Functions and Models</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$','$']], displayMath: [['\\[','\\]'], ['$$','$$']] }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#111827; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
+    --accent:#2563eb; --accent-light:#dbeafe; --warn:#b45309; --warn-bg:#fffbeb;
+    --border:#e5e7eb; --sidebar-w:250px; --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:#f3f4f6;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  header.topbar{
+    background:var(--bg);color:#fff;padding:14px 24px;display:flex;align-items:center;
+    justify-content:space-between;position:sticky;top:0;z-index:20;
+  }
+  header.topbar h1{font-size:1.1rem;margin:0;font-weight:600;}
+  header.topbar span{color:#93c5fd;font-size:0.85rem;}
+
+  .layout{display:flex;min-height:100vh;}
+  nav.sidebar{
+    width:var(--sidebar-w);flex-shrink:0;background:var(--panel);color:#e5e7eb;
+    padding:20px 0;position:sticky;top:53px;height:calc(100vh - 53px);overflow-y:auto;
+  }
+  nav.sidebar .chapter-group{margin-bottom:6px;}
+  nav.sidebar .chapter-title{
+    padding:10px 20px;font-weight:700;font-size:0.95rem;color:#fff;
+    border-left:3px solid var(--accent);background:rgba(37,99,235,0.15);
+  }
+  nav.sidebar ul{list-style:none;margin:4px 0 14px 0;padding:0;}
+  nav.sidebar ul li a{
+    display:block;padding:7px 20px 7px 30px;color:#cbd5e1;font-size:0.88rem;border-left:3px solid transparent;
+  }
+  nav.sidebar ul li a:hover{background:#1f2937;color:#fff;text-decoration:none;}
+  nav.sidebar ul li a.active{background:#1f2937;color:#fff;border-left-color:var(--accent);}
+  nav.sidebar .future{color:#6b7280;font-style:italic;padding:8px 20px;font-size:0.85rem;}
+
+  main{flex:1;padding:30px 40px 80px;max-width:900px;}
+  section.concept-card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:26px 30px;margin-bottom:32px;scroll-margin-top:70px;
+  }
+  section.concept-card h2{margin-top:0;font-size:1.4rem;border-bottom:2px solid var(--accent-light);padding-bottom:10px;}
+  section.concept-card h3{font-size:1.05rem;color:var(--accent);margin-top:26px;margin-bottom:8px;}
+  .key-ideas ul{margin:0;padding-left:22px;}
+  .key-ideas li{margin-bottom:6px;}
+
+  .example{background:#f8fafc;border-left:4px solid var(--accent);border-radius:6px;padding:12px 16px;margin-bottom:14px;}
+  .example .ex-title{font-weight:600;margin-bottom:6px;}
+
+  .mistakes{background:var(--warn-bg);border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:10px;}
+  .mistakes h3{color:var(--warn);margin-top:0;}
+  .mistakes ul{margin:0;padding-left:20px;}
+  .mistakes li{margin-bottom:6px;}
+
+  ol.problems{padding-left:20px;}
+  ol.problems > li{margin-bottom:16px;}
+  details.check{margin-top:6px;}
+  details.check summary{cursor:pointer;color:var(--accent);font-size:0.88rem;font-weight:600;}
+  details.check .answer{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:0.92rem;}
+  .hint-note{font-size:0.82rem;color:var(--muted);margin-top:14px;font-style:italic;}
+
+  footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:30px;}
+
+  @media (max-width:800px){
+    .layout{flex-direction:column;}
+    nav.sidebar{width:100%;height:auto;position:relative;top:0;}
+    main{padding:20px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <h1>📘 Calculus Study Guide</h1>
+  <span>Chapter 1 · Functions and Models</span>
+</header>
+
+<div class="layout">
+  <!--
+    To add a new chapter:
+    1. Copy a .chapter-group block below and update its title + section links.
+    2. Add matching <section class="concept-card" id="..."> blocks in <main>
+       (or move each chapter to its own HTML page and link to it from here).
+  -->
+  <nav class="sidebar">
+    <div class="chapter-group">
+      <div class="chapter-title">Chapter 1: Functions and Models</div>
+      <ul>
+        <li><a href="#sec1-1">1.1 Four Ways to Represent a Function</a></li>
+        <li><a href="#sec1-2">1.2 Catalog of Essential Functions</a></li>
+        <li><a href="#sec1-3">1.3 New Functions from Old Functions</a></li>
+        <li><a href="#sec1-4">1.4 Exponential Functions</a></li>
+        <li><a href="#sec1-5">1.5 Inverse Functions and Logarithms</a></li>
+      </ul>
+    </div>
+    <div class="chapter-group">
+      <div class="chapter-title" style="opacity:0.5;">Chapter 2: Limits and Derivatives</div>
+      <div class="future">Coming soon — this sidebar is built to grow as new chapters are added.</div>
+    </div>
+  </nav>
+
+  <main>
+
+  <!-- 1.1 -->
+  <section class="concept-card" id="sec1-1">
+    <h2>1.1 Four Ways to Represent a Function</h2>
+
+    <h3>Key Ideas</h3>
+    <div class="key-ideas"><ul>
+      <li>A function assigns exactly <em>one</em> output to each input in its domain — think of it as a rule or a machine.</li>
+      <li>The same function can be described verbally, with a table of values, with a graph, or with a formula.</li>
+      <li><strong>Domain</strong> = the set of allowed inputs. <strong>Range</strong> = the set of outputs actually produced.</li>
+      <li>For formulas, the domain is usually restricted by things like division by zero, square roots of negatives, or logs of non-positive numbers.</li>
+      <li><strong>Vertical Line Test:</strong> a curve represents a function of \(x\) only if every vertical line crosses it at most once.</li>
+      <li><strong>Piecewise functions</strong> use different formulas on different intervals — always check which interval \(x\) falls into first.</li>
+      <li><strong>Even function:</strong> \(f(-x) = f(x)\), graph symmetric about the \(y\)-axis. <strong>Odd function:</strong> \(f(-x) = -f(x)\), graph symmetric about the origin. Most functions are neither.</li>
+      <li>A function is <strong>increasing</strong> on an interval if its outputs rise as \(x\) increases there, and <strong>decreasing</strong> if outputs fall.</li>
+    </ul></div>
+
+    <h3>Worked Examples</h3>
+    <div class="example">
+      <div class="ex-title">Example 1 — Domain with a root and a denominator</div>
+      Find the domain of \(f(x) = \dfrac{\sqrt{5-x}}{x+2}\).<br>
+      Need \(5 - x \ge 0 \Rightarrow x \le 5\), and \(x \ne -2\) (denominator can't be zero).<br>
+      Domain: \((-\infty, -2) \cup (-2, 5]\).
+    </div>
+    <div class="example">
+      <div class="ex-title">Example 2 — Even, odd, or neither</div>
+      Classify \(h(x) = 3x^3 - 2x\).<br>
+      \(h(-x) = 3(-x)^3 - 2(-x) = -3x^3 + 2x = -(3x^3-2x) = -h(x)\) → <strong>odd</strong>.
+    </div>
+    <div class="example">
+      <div class="ex-title">Example 3 — Evaluating a piecewise function</div>
+      \(f(x) = \begin{cases} x+1 & x<0 \\ x^2 & x \ge 0\end{cases}\)<br>
+      \(f(-3)\): since \(-3<0\), use first piece: \(-3+1=-2\).<br>
+      \(f(0)\): since \(0 \ge 0\), use second piece: \(0^2=0\).<br>
+      \(f(2) = 2^2 = 4\).
+    </div>
+
+    <div class="mistakes">
+      <h3>⚠ Common Mistakes</h3>
+      <ul>
+        <li>Forgetting one of several domain restrictions at once (e.g. checking the square root but not the denominator).</li>
+        <li>Assuming "not even" means "odd" — most functions are neither.</li>
+        <li>Plugging a piecewise input into the wrong piece by misreading a boundary (e.g. treating \(x=0\) as "less than 0").</li>
+      </ul>
+    </div>
+
+    <h3>Practice Problems</h3>
+    <ol class="problems">
+      <li>Find the domain of \(g(x) = \dfrac{\sqrt{x+4}}{x-1}\).
+        <details class="check"><summary>Check answer</summary><div class="answer">\([-4,1)\cup(1,\infty)\)</div></details>
+      </li>
+      <li>Determine whether \(p(x) = x^4 - 3x^2 + 1\) is even, odd, or neither.
+        <details class="check"><summary>Check answer</summary><div class="answer">Even, since \(p(-x)=p(x)\).</div></details>
+      </li>
+      <li>Given \(f(x) = \begin{cases}2x+3 & x\le 1\\ 5-x & x>1\end{cases}\), find \(f(-2)\), \(f(1)\), and \(f(4)\).
+        <details class="check"><summary>Check answer</summary><div class="answer">\(f(-2)=-1\), \(f(1)=5\), \(f(4)=1\)</div></details>
+      </li>
+      <li>Does the equation \(x^2+y^2=9\) define \(y\) as a function of \(x\)? Explain using the Vertical Line Test.
+        <details class="check"><summary>Check answer</summary><div class="answer">No — it's a circle; most vertical lines through the interior cross it twice.</div></details>
+      </li>
+      <li>Describe the interval(s) where \(f(x)=(x-2)^2\) is decreasing and where it is increasing.
+        <details class="check"><summary>Check answer</summary><div class="answer">Decreasing on \((-\infty,2)\), increasing on \((2,\infty)\).</div></details>
+      </li>
+    </ol>
+    <p class="hint-note">Post your work for any of these in the chat and I'll check it in detail and explain any mistakes.</p>
+  </section>
+
+  <!-- 1.2 -->
+  <section class="concept-card" id="sec1-2">
+    <h2>1.2 Mathematical Models: A Catalog of Essential Functions</h2>
+
+    <h3>Key Ideas</h3>
+    <div class="key-ideas"><ul>
+      <li><strong>Linear:</strong> \(f(x)=mx+b\) — constant rate of change \(m\); good for quantities that change by the same amount per unit input.</li>
+      <li><strong>Polynomial:</strong> sum of terms \(a_nx^n+\dots+a_0\); the degree drives the overall shape.</li>
+      <li><strong>Power functions</strong> \(x^a\): positive-integer powers form even/odd families of curves; \(a=1/n\) gives root functions; \(a=-1\) gives the reciprocal function.</li>
+      <li><strong>Rational functions:</strong> ratio of two polynomials; domain excludes wherever the denominator is zero.</li>
+      <li><strong>Algebraic functions:</strong> built from polynomials using \(+,-,\times,\div\), and roots.</li>
+      <li><strong>Trigonometric functions</strong> are periodic (period \(2\pi\) for sin/cos) and always use radians in calculus; \(-1\le \sin x, \cos x \le 1\).</li>
+      <li><strong>Exponential functions</strong> \(b^x\) (\(b>0, b\ne 1\)) grow or decay rapidly; domain is all reals, range is \((0,\infty)\).</li>
+      <li><strong>Logarithmic functions</strong> are the inverses of exponential functions.</li>
+    </ul></div>
+
+    <h3>Worked Examples</h3>
+    <div class="example">
+      <div class="ex-title">Example 1 — Building a linear model</div>
+      A taxi charges a $20 flat fee plus $3/mile. \(C(x) = 3x+20\). Cost for 15 miles: \(C(15)=3(15)+20=65\), i.e. $65.
+    </div>
+    <div class="example">
+      <div class="ex-title">Example 2 — Reading a polynomial's basic shape</div>
+      \(p(x) = -2x^3+5x-1\) has degree 3 (odd degree) and a negative leading coefficient, so it has the general "S-curve" shape of a cubic, flipped compared to \(y=x^3\).
+    </div>
+    <div class="example">
+      <div class="ex-title">Example 3 — Domain of a rational function</div>
+      \(r(x) = \dfrac{x+1}{x^2-4}\). Denominator zero at \(x=\pm2\), so domain is all reals except \(2\) and \(-2\).
+    </div>
+
+    <div class="mistakes">
+      <h3>⚠ Common Mistakes</h3>
+      <ul>
+        <li>Confusing power functions like \(x^2\) with exponential functions like \(2^x\) — they behave very differently for large \(x\).</li>
+        <li>Forgetting to exclude denominator zeros from a rational function's domain.</li>
+        <li>Using degrees instead of radians in trigonometric calculations.</li>
+      </ul>
+    </div>
+
+    <h3>Practice Problems</h3>
+    <ol class="problems">
+      <li>A tank starts at 60°F and cools 2°F per hour. Write a linear model and find the temperature after 5 hours.
+        <details class="check"><summary>Check answer</summary><div class="answer">\(T(t)=60-2t\); \(T(5)=50°F\)</div></details>
+      </li>
+      <li>State the degree of \(q(x) = 4x^5-x^2+7\) and say whether that degree is odd or even.
+        <details class="check"><summary>Check answer</summary><div class="answer">Degree 5, odd.</div></details>
+      </li>
+      <li>Find the domain of \(r(x) = \dfrac{\sqrt{x}}{x^2-9}\).
+        <details class="check"><summary>Check answer</summary><div class="answer">\([0,3)\cup(3,\infty)\)</div></details>
+      </li>
+      <li>Classify each: (a) \(f(x)=x^3-2\), (b) \(g(x)=\dfrac{1}{x+1}\), (c) \(h(x)=\sin x\).
+        <details class="check"><summary>Check answer</summary><div class="answer">(a) polynomial, (b) rational, (c) trigonometric (transcendental)</div></details>
+      </li>
+      <li>Compare the general shapes of \(y=x^4\) and \(y=x^5\) for negative \(x\).
+        <details class="check"><summary>Check answer</summary><div class="answer">\(x^4\) stays positive (even power family); \(x^5\) goes negative (odd power family).</div></details>
+      </li>
+    </ol>
+    <p class="hint-note">Share your reasoning in chat and I'll walk through exactly what's right or needs adjusting.</p>
+  </section>
+
+  <!-- 1.3 -->
+  <section class="concept-card" id="sec1-3">
+    <h2>1.3 New Functions from Old Functions</h2>
+
+    <h3>Key Ideas</h3>
+    <div class="key-ideas"><ul>
+      <li><strong>Vertical/horizontal shifts:</strong> \(f(x)+c\) shifts up, \(f(x)-c\) shifts down, \(f(x-c)\) shifts right, \(f(x+c)\) shifts left (for \(c>0\)).</li>
+      <li><strong>Stretch/shrink/reflect:</strong> \(cf(x)\) stretches vertically for \(c>1\); \(f(cx)\) <em>shrinks</em> horizontally for \(c>1\) (opposite of the vertical case); \(-f(x)\) reflects over the \(x\)-axis; \(f(-x)\) reflects over the \(y\)-axis.</li>
+      <li>Arithmetic combinations \((f+g)\), \((f-g)\), \((fg)\), \((f/g)\) have domain equal to the <em>intersection</em> of the two domains (and \(f/g\) also excludes wherever \(g=0\)).</li>
+      <li><strong>Composition:</strong> \((f\circ g)(x) = f(g(x))\) — apply \(g\) first, then \(f\). In general \((f\circ g)\ne(g\circ f)\).</li>
+      <li>Domain of \(f\circ g\): all \(x\) in the domain of \(g\) such that \(g(x)\) is in the domain of \(f\).</li>
+    </ul></div>
+
+    <h3>Worked Examples</h3>
+    <div class="example">
+      <div class="ex-title">Example 1 — Reading transformations</div>
+      Given \(f(x)=x^2\), describe \(g(x)=f(x-3)+2=(x-3)^2+2\): shift right 3, then up 2.
+    </div>
+    <div class="example">
+      <div class="ex-title">Example 2 — Composition order matters</div>
+      \(f(x)=2x-1\), \(g(x)=x^2+3\).<br>
+      \((f\circ g)(x) = 2(x^2+3)-1 = 2x^2+5\).<br>
+      \((g\circ f)(x) = (2x-1)^2+3 = 4x^2-4x+4\).<br>
+      These are different functions — order matters.
+    </div>
+    <div class="example">
+      <div class="ex-title">Example 3 — Domain of a quotient</div>
+      \(f(x)=\sqrt{x}\), \(g(x)=x-4\). \(f/g\) needs \(x\ge0\) (domain of \(f\)) and \(x\ne4\) (where \(g=0\)). Domain: \([0,4)\cup(4,\infty)\).
+    </div>
+
+    <div class="mistakes">
+      <h3>⚠ Common Mistakes</h3>
+      <ul>
+        <li>Reading \(f(x-c)\) as a shift <em>left</em> instead of right.</li>
+        <li>Forgetting that horizontal stretch/shrink is "backwards" relative to vertical stretch/shrink.</li>
+        <li>Assuming \((f\circ g)(x) = (g\circ f)(x)\) — check both directions separately.</li>
+        <li>Skipping the domain check for compositions involving square roots or denominators.</li>
+      </ul>
+    </div>
+
+    <h3>Practice Problems</h3>
+    <ol class="problems">
+      <li>Describe the transformations that turn \(y=x^2\) into \(y=-(x+1)^2-4\).
+        <details class="check"><summary>Check answer</summary><div class="answer">Shift left 1, reflect over the x-axis, shift down 4 (reflection and vertical shift order can vary — the key transformations are shift left 1, reflect vertically, shift down 4).</div></details>
+      </li>
+      <li>If \(f(x)=\sqrt{x}\) and \(g(x)=x+5\), find \((f\circ g)(x)\) and its domain.
+        <details class="check"><summary>Check answer</summary><div class="answer">\(\sqrt{x+5}\), domain \(x\ge-5\)</div></details>
+      </li>
+      <li>Given \(f(x)=1/x\) and \(g(x)=x-2\), find \((g\circ f)(x)\) and \((f\circ g)(x)\). Are they equal?
+        <details class="check"><summary>Check answer</summary><div class="answer">\((g\circ f)(x)=\dfrac{1}{x}-2\); \((f\circ g)(x)=\dfrac{1}{x-2}\). Not equal.</div></details>
+      </li>
+      <li>How does the graph of \(y=3f(x)\) differ from \(y=f(x)\)? How about \(y=f(x/3)\)?
+        <details class="check"><summary>Check answer</summary><div class="answer">\(3f(x)\): vertical stretch by 3. \(f(x/3)\): horizontal stretch by 3.</div></details>
+      </li>
+      <li>For \(f(x)=x^2-1\), \(g(x)=x+1\), find and simplify \((f+g)(x)\), \((f-g)(x)\), \((fg)(x)\).
+        <details class="check"><summary>Check answer</summary><div class="answer">\((f+g)(x)=x^2+x\); \((f-g)(x)=x^2-x-2\); \((fg)(x)=(x^2-1)(x+1)=x^3+x^2-x-1\)</div></details>
+      </li>
+    </ol>
+    <p class="hint-note">Send me your steps in chat — I'll pinpoint exactly where any error creeps in.</p>
+  </section>
+
+  <!-- 1.4 -->
+  <section class="concept-card" id="sec1-4">
+    <h2>1.4 Exponential Functions</h2>
+
+    <h3>Key Ideas</h3>
+    <div class="key-ideas"><ul>
+      <li>\(b^x\) is defined for every real \(x\) when \(b>0\); the usual laws of exponents apply.</li>
+      <li>Graphs all pass through \((0,1)\): if \(b>1\) the function grows; if \(0<b<1\) it decays.</li>
+      <li>Great for modeling repeated proportional growth/decay: \(P(t)=P_0\cdot b^{t/k}\) where the quantity multiplies by \(b\) every \(k\) units of time.</li>
+      <li>The number \(e \approx 2.71828\) is the unique base for which the tangent line to \(y=b^x\) at \(x=0\) has slope exactly 1. \(f(x)=e^x\) is the "natural" exponential function.</li>
+    </ul></div>
+
+    <h3>Worked Examples</h3>
+    <div class="example">
+      <div class="ex-title">Example 1 — Doubling model</div>
+      A culture starts at 200 and doubles every 3 hours: \(P(t)=200\cdot2^{t/3}\). After 9 hours: \(P(9)=200\cdot2^{3}=1600\).
+    </div>
+    <div class="example">
+      <div class="ex-title">Example 2 — Exponential vs. polynomial growth</div>
+      At \(x=5\): \(3^5=243\) but \(5^3=125\). Exponentials eventually overtake polynomials no matter the polynomial's degree.
+    </div>
+    <div class="example">
+      <div class="ex-title">Example 3 — Simplifying with exponent laws</div>
+      \(\dfrac{e^2\cdot e^3}{e^4} = e^{2+3-4}=e^1=e\).
+    </div>
+
+    <div class="mistakes">
+      <h3>⚠ Common Mistakes</h3>
+      <ul>
+        <li>Confusing exponential growth \(b^x\) with polynomial growth \(x^b\) — these are very different functions.</li>
+        <li>Thinking \(0.5^x\) is somehow linear-like because 0.5 "looks like" a slope; it is decay, not a line.</li>
+        <li>Treating \(e\) as exactly \(2.718\) rather than an irrational number that's only approximated by that decimal.</li>
+      </ul>
+    </div>
+
+    <h3>Practice Problems</h3>
+    <ol class="problems">
+      <li>A population of 500 grows by a factor of 1.5 every year. Write an exponential model and find the population after 4 years.
+        <details class="check"><summary>Check answer</summary><div class="answer">\(P(t)=500(1.5)^t\); \(P(4)=500(1.5)^4=2531.25\)</div></details>
+      </li>
+      <li>Which grows faster in the long run, \(f(x)=2^x\) or \(g(x)=x^{10}\)? Explain your reasoning.
+        <details class="check"><summary>Check answer</summary><div class="answer">\(f(x)=2^x\) eventually wins — exponential functions always outgrow any fixed power function eventually.</div></details>
+      </li>
+      <li>Simplify \(\dfrac{(e^3)^2}{e^4}\).
+        <details class="check"><summary>Check answer</summary><div class="answer">\(e^{6-4}=e^2\)</div></details>
+      </li>
+      <li>An 80 mg radioactive sample halves every 5 days. Write a decay model and find the amount left after 15 days.
+        <details class="check"><summary>Check answer</summary><div class="answer">\(A(t)=80(1/2)^{t/5}\); \(A(15)=80(1/2)^3=10\) mg</div></details>
+      </li>
+      <li>True or false: \(e^0=1\). Justify using exponent properties.
+        <details class="check"><summary>Check answer</summary><div class="answer">True — any nonzero base raised to the 0 power equals 1, by definition/consistency of exponent rules.</div></details>
+      </li>
+    </ol>
+    <p class="hint-note">Post your answers with your steps and I'll review them in detail.</p>
+  </section>
+
+  <!-- 1.5 -->
+  <section class="concept-card" id="sec1-5">
+    <h2>1.5 Inverse Functions and Logarithms</h2>
+
+    <h3>Key Ideas</h3>
+    <div class="key-ideas"><ul>
+      <li>A function has an inverse only if it's <strong>one-to-one</strong> (passes the Horizontal Line Test).</li>
+      <li>\(f^{-1}\) swaps the domain and range of \(f\); their graphs are reflections of each other across the line \(y=x\).</li>
+      <li>Cancellation equations: \(f^{-1}(f(x))=x\) for \(x\) in the domain of \(f\); \(f(f^{-1}(x))=x\) for \(x\) in the domain of \(f^{-1}\).</li>
+      <li><strong>Caution:</strong> \(f^{-1}(x)\) does <em>not</em> mean \(1/f(x)\).</li>
+      <li>\(\log_b x\) is the inverse of \(b^x\): \(\log_b x = y \iff b^y = x\).</li>
+      <li>Log laws: \(\log_b(xy)=\log_b x+\log_b y\); \(\log_b(x/y)=\log_b x-\log_b y\); \(\log_b(x^r)=r\log_b x\).</li>
+      <li>Natural log \(\ln x = \log_e x\); \(e^{\ln x}=x\), \(\ln(e^x)=x\).</li>
+      <li>Inverse trig functions require restricting the original function's domain first (e.g. \(\sin\) restricted to \([-\pi/2,\pi/2]\) before defining \(\arcsin\)).</li>
+    </ul></div>
+
+    <h3>Worked Examples</h3>
+    <div class="example">
+      <div class="ex-title">Example 1 — Finding an inverse algebraically</div>
+      Find \(f^{-1}\) for \(f(x)=2x-6\).<br>
+      Write \(y=2x-6\), solve for \(x\): \(x=\dfrac{y+6}{2}\), then swap variables: \(f^{-1}(x)=\dfrac{x+6}{2}\).<br>
+      Check: \(f^{-1}(f(x))=\dfrac{(2x-6)+6}{2}=x\). ✓
+    </div>
+    <div class="example">
+      <div class="ex-title">Example 2 — Solving an exponential equation with logs</div>
+      Solve \(e^{2x}=10\).<br>
+      Take \(\ln\) of both sides: \(2x=\ln 10\), so \(x=\dfrac{\ln 10}{2}\approx 1.151\).
+    </div>
+    <div class="example">
+      <div class="ex-title">Example 3 — Using log laws to expand</div>
+      \(\ln\!\left(\dfrac{x^3\sqrt{y}}{z}\right) = 3\ln x + \tfrac{1}{2}\ln y - \ln z\).
+    </div>
+
+    <div class="mistakes">
+      <h3>⚠ Common Mistakes</h3>
+      <ul>
+        <li>Reading \(f^{-1}(x)\) as the reciprocal \(1/f(x)\) — the \(-1\) is inverse notation, not an exponent.</li>
+        <li>Writing \(\log_b(x+y)\) as \(\log_b x + \log_b y\) — the product law applies to products, not sums.</li>
+        <li>Trying to invert a function that isn't one-to-one without restricting its domain first.</li>
+        <li>Taking the log of a negative number or zero — \(\log_b x\) requires \(x>0\).</li>
+      </ul>
+    </div>
+
+    <h3>Practice Problems</h3>
+    <ol class="problems">
+      <li>Find \(f^{-1}(x)\) for \(f(x)=\dfrac{x-1}{3}\) and verify with a cancellation equation.
+        <details class="check"><summary>Check answer</summary><div class="answer">\(f^{-1}(x)=3x+1\); check: \(f(f^{-1}(x))=\dfrac{(3x+1)-1}{3}=x\). ✓</div></details>
+      </li>
+      <li>Is \(f(x)=x^2\) one-to-one on \((-\infty,\infty)\)? On \([0,\infty)\)? What is the inverse on the restricted domain?
+        <details class="check"><summary>Check answer</summary><div class="answer">Not one-to-one on all reals (fails the Horizontal Line Test); it is one-to-one on \([0,\infty)\), where \(f^{-1}(x)=\sqrt{x}\).</div></details>
+      </li>
+      <li>Evaluate without a calculator: \(\log_2 32\), \(\log_{10} 0.001\), \(\ln e^7\).
+        <details class="check"><summary>Check answer</summary><div class="answer">\(\log_2 32=5\); \(\log_{10}0.001=-3\); \(\ln e^7=7\)</div></details>
+      </li>
+      <li>Solve for \(x\): \(5\cdot 3^{x}=45\).
+        <details class="check"><summary>Check answer</summary><div class="answer">\(3^x=9\Rightarrow x=2\)</div></details>
+      </li>
+      <li>Write as a single logarithm: \(2\ln x + \ln y - \tfrac{1}{2}\ln z\).
+        <details class="check"><summary>Check answer</summary><div class="answer">\(\ln\!\left(\dfrac{x^2 y}{\sqrt{z}}\right)\)</div></details>
+      </li>
+    </ol>
+    <p class="hint-note">Post your work in the chat and I'll go through each step with you.</p>
+  </section>
+
+  </main>
+</div>
+
+<footer>
+  Calculus Study Guide · Chapter 1: Functions and Models · Built to grow — more chapters coming.
+</footer>
+
+<script>
+  // Highlight the sidebar link for the section currently in view.
+  const links = document.querySelectorAll('nav.sidebar a[href^="#"]');
+  const sections = [...links].map(a => document.querySelector(a.getAttribute('href')));
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => s && observer.observe(s));
+</script>
+
+</body>
+</html>
