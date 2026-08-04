@@ -23,10 +23,24 @@
 
   header.topbar{
     background:var(--bg);color:#fff;padding:14px 24px;display:flex;align-items:center;
-    justify-content:space-between;position:sticky;top:0;z-index:20;
+    justify-content:space-between;position:sticky;top:0;z-index:20;flex-wrap:wrap;row-gap:10px;
   }
   header.topbar h1{font-size:1.1rem;margin:0;font-weight:600;}
   header.topbar span{color:#93c5fd;font-size:0.85rem;}
+
+  .stats-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .stats-bar #levelLabel{font-weight:700;color:#fbbf24;font-size:0.85rem;white-space:nowrap;}
+  .xp-bar{width:140px;height:9px;background:rgba(255,255,255,0.15);border-radius:6px;overflow:hidden;}
+  .xp-fill{height:100%;width:0%;background:linear-gradient(90deg,#60a5fa,#34d399);transition:width .5s ease;}
+  #xpLabel{font-size:0.75rem;color:#cbd5e1;white-space:nowrap;}
+  .badge-case{display:flex;gap:5px;}
+  .badge-case .badge{font-size:1.05rem;opacity:0.25;filter:grayscale(1);transition:all .3s ease;cursor:default;}
+  .badge-case .badge.earned{opacity:1;filter:none;transform:scale(1.15);}
+  .icon-btn{
+    background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;
+    border-radius:6px;padding:4px 10px;font-size:0.75rem;cursor:pointer;white-space:nowrap;
+  }
+  .icon-btn:hover{background:rgba(255,255,255,0.22);}
 
   .layout{display:flex;min-height:100vh;}
   nav.sidebar{
@@ -68,10 +82,34 @@
   ol.problems > li{margin-bottom:16px;}
   details.check{margin-top:6px;}
   details.check summary{cursor:pointer;color:var(--accent);font-size:0.88rem;font-weight:600;}
-  details.check .answer{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:0.92rem;}
+  details.check summary::after{content:"";}
+  details.check.solved summary::after{content:" ✔";color:#10b981;}
+  details.check .answer{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;padding:8px 12px;margin-top:6px;font-size:0.92rem;animation:pop .25s ease;}
   .hint-note{font-size:0.82rem;color:var(--muted);margin-top:14px;font-style:italic;}
 
+  .section-progress{display:flex;align-items:center;gap:10px;margin:-6px 0 16px 0;}
+  .progress-track{flex:1;max-width:220px;height:8px;background:var(--border);border-radius:5px;overflow:hidden;}
+  .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#34d399);transition:width .4s ease;}
+  .progress-text{font-size:0.78rem;color:var(--muted);white-space:nowrap;}
+
+  nav.sidebar ul li a .sidebar-check{color:#34d399;margin-left:4px;}
+
+  .xp-toast{
+    position:fixed;top:70px;right:20px;background:#111827;color:#fff;padding:10px 18px;
+    border-radius:8px;font-size:0.85rem;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,0.25);
+    opacity:0;transform:translateY(-10px);transition:all .3s ease;z-index:100;max-width:280px;
+  }
+  .xp-toast.show{opacity:1;transform:translateY(0);}
+
+  .confetti-piece{
+    position:fixed;top:-12px;width:8px;height:14px;z-index:99;border-radius:2px;
+    animation:confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall{ to{ transform:translateY(105vh) rotate(360deg); opacity:0.85; } }
+  @keyframes pop{ from{ transform:scale(0.95); opacity:0; } to{ transform:scale(1); opacity:1; } }
+
   footer{text-align:center;color:var(--muted);font-size:0.8rem;padding:30px;}
+  footer .icon-btn{margin-top:8px;}
 
   @media (max-width:800px){
     .layout{flex-direction:column;}
@@ -83,8 +121,17 @@
 <body>
 
 <header class="topbar">
-  <h1>📘 Calculus Study Guide</h1>
-  <span>Chapter 1 · Functions and Models</span>
+  <div>
+    <h1>📘 Calculus Study Guide</h1>
+    <span>Chapter 1 · Functions and Models</span>
+  </div>
+  <div class="stats-bar">
+    <span id="levelLabel">Level 1</span>
+    <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
+    <span id="xpLabel">0 / 100 XP</span>
+    <div class="badge-case" id="badgeCase"></div>
+    <button class="icon-btn" id="soundToggle" type="button" title="Toggle sound effects">🔇</button>
+  </div>
 </header>
 
 <div class="layout">
@@ -425,6 +472,8 @@
 
 <footer>
   Calculus Study Guide · Chapter 1: Functions and Models · Built to grow — more chapters coming.
+  <br>
+  <button class="icon-btn" id="resetProgress" type="button">↺ Reset progress</button>
 </footer>
 
 <script>
@@ -439,6 +488,196 @@
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
   sections.forEach(s => s && observer.observe(s));
+</script>
+
+<script>
+(function(){
+  const SECTIONS = [
+    { id: 'sec1-1', badge: '🧭', name: 'Domain Detective' },
+    { id: 'sec1-2', badge: '📐', name: 'Model Builder' },
+    { id: 'sec1-3', badge: '🔄', name: 'Transform Master' },
+    { id: 'sec1-4', badge: '📈', name: 'Growth Guru' },
+    { id: 'sec1-5', badge: '🔑', name: 'Inverse Ace' },
+  ];
+  const XP_PER_PROBLEM = 20;
+  const XP_SECTION_BONUS = 50;
+  const LS_KEY = 'mathstudy-progress';
+
+  let state;
+  try { state = JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch (e) { state = {}; }
+  state.solved = state.solved || {};
+  state.badges = state.badges || {};
+  state.xp = state.xp || 0;
+  state.soundOn = state.soundOn || false;
+
+  function save() { localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+  function level(xp) { return Math.floor(xp / 100) + 1; }
+
+  function updateXPBar() {
+    const lvl = level(state.xp);
+    const base = (lvl - 1) * 100;
+    const next = lvl * 100;
+    const pct = Math.min(100, ((state.xp - base) / (next - base)) * 100);
+    document.getElementById('xpFill').style.width = pct + '%';
+    document.getElementById('xpLabel').textContent = `${state.xp} / ${next} XP`;
+    document.getElementById('levelLabel').textContent = `Level ${lvl}`;
+  }
+
+  function updateSectionProgress(sectionId) {
+    const card = document.getElementById(sectionId);
+    const detailsEls = card.querySelectorAll('details.check');
+    let solvedCount = 0;
+    detailsEls.forEach((d, i) => {
+      const solved = !!state.solved[sectionId + '-' + i];
+      d.classList.toggle('solved', solved);
+      if (solved) solvedCount++;
+    });
+    const total = detailsEls.length;
+    const progEl = document.getElementById('progress-' + sectionId);
+    if (progEl) {
+      progEl.querySelector('.progress-fill').style.width = (total ? solvedCount / total * 100 : 0) + '%';
+      progEl.querySelector('.progress-text').textContent = `${solvedCount}/${total} solved`;
+    }
+    const link = document.querySelector(`nav.sidebar a[href="#${sectionId}"]`);
+    if (link) {
+      let mark = link.querySelector('.sidebar-check');
+      if (total > 0 && solvedCount === total) {
+        if (!mark) {
+          mark = document.createElement('span');
+          mark.className = 'sidebar-check';
+          mark.textContent = '✅';
+          link.appendChild(mark);
+        }
+      } else if (mark) {
+        mark.remove();
+      }
+    }
+    return { solvedCount, total };
+  }
+
+  function playChime() {
+    if (!state.soundOn) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = 880;
+      g.gain.value = 0.08;
+      o.start();
+      o.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.15);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      o.stop(ctx.currentTime + 0.3);
+    } catch (e) { /* audio unsupported */ }
+  }
+
+  function showToast(text) {
+    const toast = document.createElement('div');
+    toast.className = 'xp-toast';
+    toast.textContent = text;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 2200);
+  }
+
+  function confettiBurst() {
+    const colors = ['#2563eb', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6'];
+    for (let i = 0; i < 28; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+      piece.style.animationDelay = (Math.random() * 0.3) + 's';
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), 4000);
+    }
+  }
+
+  function renderBadgeCase() {
+    const case_ = document.getElementById('badgeCase');
+    case_.innerHTML = SECTIONS.map(s => {
+      const earned = !!state.badges[s.id];
+      return `<span class="badge ${earned ? 'earned' : ''}" title="${s.name}${earned ? ' — earned!' : ' — locked'}">${s.badge}</span>`;
+    }).join('');
+  }
+
+  function awardBadge(sectionMeta) {
+    if (state.badges[sectionMeta.id]) return;
+    state.badges[sectionMeta.id] = true;
+    state.xp += XP_SECTION_BONUS;
+    save();
+    updateXPBar();
+    renderBadgeCase();
+    confettiBurst();
+    playChime();
+    showToast(`🏆 Badge earned: ${sectionMeta.badge} ${sectionMeta.name}! +${XP_SECTION_BONUS} XP`);
+    if (Object.keys(state.badges).length === SECTIONS.length) {
+      setTimeout(() => {
+        confettiBurst();
+        showToast('🎉 Chapter 1 complete — you are a Calculus Champion!');
+      }, 700);
+    }
+  }
+
+  function handleToggle(details, sectionId, index) {
+    const key = sectionId + '-' + index;
+    if (details.open && !state.solved[key]) {
+      state.solved[key] = true;
+      state.xp += XP_PER_PROBLEM;
+      save();
+      updateXPBar();
+      playChime();
+      showToast(`+${XP_PER_PROBLEM} XP`);
+      const { solvedCount, total } = updateSectionProgress(sectionId);
+      if (solvedCount === total) {
+        awardBadge(SECTIONS.find(s => s.id === sectionId));
+      }
+    }
+  }
+
+  function init() {
+    SECTIONS.forEach(s => {
+      const card = document.getElementById(s.id);
+      if (!card) return;
+      const h2 = card.querySelector('h2');
+      const bar = document.createElement('div');
+      bar.className = 'section-progress';
+      bar.id = 'progress-' + s.id;
+      bar.innerHTML = '<div class="progress-track"><div class="progress-fill"></div></div><span class="progress-text"></span>';
+      h2.insertAdjacentElement('afterend', bar);
+
+      card.querySelectorAll('details.check').forEach((d, i) => {
+        d.addEventListener('toggle', () => handleToggle(d, s.id, i));
+      });
+      updateSectionProgress(s.id);
+    });
+
+    updateXPBar();
+    renderBadgeCase();
+
+    const soundBtn = document.getElementById('soundToggle');
+    soundBtn.textContent = state.soundOn ? '🔊' : '🔇';
+    soundBtn.addEventListener('click', () => {
+      state.soundOn = !state.soundOn;
+      soundBtn.textContent = state.soundOn ? '🔊' : '🔇';
+      save();
+    });
+
+    document.getElementById('resetProgress').addEventListener('click', () => {
+      if (confirm('Reset all XP, badges, and solved problems? This cannot be undone.')) {
+        state = { solved: {}, badges: {}, xp: 0, soundOn: state.soundOn };
+        save();
+        location.reload();
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
 </script>
 
 </body>
